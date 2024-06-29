@@ -38,12 +38,15 @@ public class OldPersonController {
     // 添加老人信息
     @PutMapping("/oldperson")
     public Result addOldPerson(@RequestBody OldPerson oldPerson) throws Exception {
-        if(oldPerson.getName()==null){
+        if (oldPerson.getName() == null) {
             return Result.error("姓名不能为空");
-        }else if(oldPerson.getId_card()==null){
-            return  Result.error("身份证不能为空");
-        }else if(oldPerson.getId_card().equals(oldPersonService.getOldPersonByIdCard(oldPerson.getId_card()).getId_card())){
-            return Result.error("此人信息已存在，请勿重复插入");
+        } else if (oldPerson.getId_card() == null) {
+            return Result.error("身份证不能为空");
+        } else {
+            OldPerson existingOldPerson = oldPersonService.getOldPersonByIdCard(oldPerson.getId_card());
+            if (existingOldPerson != null && existingOldPerson.getId_card().equals(oldPerson.getId_card())) {
+                return Result.error("此人信息已存在，请勿重复插入");
+            }
         }
 //        // 把文件的内容储存到本地磁盘上
 //        String originalFilename = file.getOriginalFilename();
