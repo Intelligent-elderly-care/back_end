@@ -73,7 +73,7 @@ public class OldPersonControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].name", is("John Doe")));
     }
-
+//测试
     @Test
     public void testAddOldPerson() throws Exception {
         // Mock the service method to return null to simulate no existing OldPerson with the same ID card
