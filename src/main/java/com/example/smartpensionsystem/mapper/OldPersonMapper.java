@@ -19,6 +19,7 @@ public interface OldPersonMapper {
 
     @Insert("insert into oldperson_info(name, gender, phone, id_card, birthday, checkin_date, checkout_date, room_number, imgset_dir, firstguardian_name, firstguardian_relationship, firstguardian_phone, firstguardian_wechat, secondguardian_name, secondguardian_relationship, secondguardian_phone, secondguardian_wechat, health_state, description) "
             + "values (#{name}, #{gender}, #{phone}, #{id_card}, #{birthday}, #{checkin_date}, #{checkout_date}, #{room_number}, #{imgset_dir}, #{firstguardian_name}, #{firstguardian_relationship}, #{firstguardian_phone}, #{firstguardian_wechat}, #{secondguardian_name}, #{secondguardian_relationship}, #{secondguardian_phone}, #{secondguardian_wechat}, #{health_state}, #{description})")
+
     void addOldPerson(OldPerson oldPerson);
 
     @Delete("delete from oldperson_info where id=#{id}")

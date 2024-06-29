@@ -39,6 +39,7 @@ public class OldPersonController {
     // 添加老人信息
     @PutMapping("/add")
     public Result addOldPerson(@RequestBody OldPerson oldPerson) throws Exception {
+        System.out.println(oldPersonService.getOldPersonByIdCard(oldPerson.getId_card()));
         if(oldPerson.getName()==null){
             return Result.error("姓名不能为空");
         }else if(oldPerson.getId_card()==null){
