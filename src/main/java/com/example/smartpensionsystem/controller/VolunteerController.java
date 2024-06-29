@@ -1,5 +1,6 @@
 package com.example.smartpensionsystem.controller;
 
+import com.example.smartpensionsystem.entity.Result;
 import com.example.smartpensionsystem.entity.Volunteer;
 import com.example.smartpensionsystem.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,29 +15,54 @@ public class VolunteerController {
     @Autowired
     private VolunteerService volunteerService;
 
-    @GetMapping("/{id}")
-    public Volunteer getVolunteerById(@PathVariable Integer id) {
-        return volunteerService.getVolunteerById(id);
+    // 根据id获取志愿者信息
+    @GetMapping("/findById/{id}")
+    public Result getVolunteerById(@PathVariable Integer id) {
+        Volunteer volunteer = volunteerService.getVolunteerById(id);
+        if (volunteer != null) {
+            return Result.success(volunteer);
+        } else {
+            return Result.error("该id的志愿者信息不存在");
+        }
     }
 
-    @GetMapping
-    public List<Volunteer> getAllVolunteers() {
-        return volunteerService.getAllVolunteers();
+    // 获取所有志愿者信息
+    @GetMapping("/findAll")
+    public Result getAllVolunteers() {
+        List<Volunteer> volunteers = volunteerService.getAllVolunteers();
+        return Result.success(volunteers);
     }
 
-    @PostMapping
-    public void insertVolunteer(@RequestBody Volunteer volunteer) {
+    // 添加志愿者信息
+    @PutMapping("/add")
+    public Result insertVolunteer(@RequestBody Volunteer volunteer) {
+        if (volunteer.getName() == null) {
+            return Result.error("姓名不能为空");
+        }
         volunteerService.insertVolunteer(volunteer);
+        return Result.success();
     }
 
-    @PutMapping("/{id}")
-    public void updateVolunteer(@PathVariable Integer id, @RequestBody Volunteer volunteer) {
-        volunteer.setId(id);
-        volunteerService.updateVolunteer(volunteer);
+    // 更新志愿者信息
+    @PostMapping("/update")
+    public Result updateVolunteer(@RequestBody Volunteer volunteer) {
+        if (volunteerService.getVolunteerById(volunteer.getId()) == null) {
+            return Result.error("该id的志愿者信息不存在");
+        } else {
+            volunteerService.updateVolunteer(volunteer);
+            return Result.success();
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteVolunteer(@PathVariable Integer id) {
-        volunteerService.deleteVolunteer(id);
+    // 删除志愿者信息
+    @DeleteMapping("/delete/{id}")
+    public Result deleteVolunteer(@PathVariable Integer id) {
+        Volunteer volunteer = volunteerService.getVolunteerById(id);
+        if (volunteer == null) {
+            return Result.error("该id的志愿者信息不存在");
+        } else {
+            volunteerService.deleteVolunteer(id);
+            return Result.success();
+        }
     }
 }

@@ -19,8 +19,8 @@ public class OldPersonServiceImpl implements OldPersonService {
     }
 
     @Override
-    public OldPerson getOldPersonByIdCard(String idCard) {
-        return oldPersonMapper.getOldPersonByIdCard(idCard);
+    public OldPerson getOldPersonByIdCard(String id_card) {
+        return oldPersonMapper.getOldPersonByIdCard(id_card);
     }
 
     @Override

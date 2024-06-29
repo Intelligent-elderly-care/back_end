@@ -14,12 +14,13 @@ import java.io.IOException;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/oldpersons")
 public class OldPersonController {
     @Autowired
     private OldPersonService oldPersonService;
 
     // 根据id获取老人信息
-    @GetMapping("/oldperson/{id}")
+    @GetMapping("/findById/{id}")
     public Result getOldPersonById(@PathVariable int id){
         OldPerson oldPerson=oldPersonService.getOldPersonById(id);
         if(oldPerson==null){
@@ -30,19 +31,19 @@ public class OldPersonController {
     }
 
     // 获取所有老人信息
-    @GetMapping("/oldperson/all")
+    @GetMapping("/findAll")
     public Result getAllOldPersons(){
         return Result.success(oldPersonService.allOldPersons());
     }
 
     // 添加老人信息
-    @PutMapping("/oldperson")
+    @PutMapping("/add")
     public Result addOldPerson(@RequestBody OldPerson oldPerson) throws Exception {
         if(oldPerson.getName()==null){
             return Result.error("姓名不能为空");
         }else if(oldPerson.getId_card()==null){
             return  Result.error("身份证不能为空");
-        }else if(oldPerson.getId_card().equals(oldPersonService.getOldPersonByIdCard(oldPerson.getId_card()).getId_card())){
+        }else if(oldPersonService.getOldPersonByIdCard(oldPerson.getId_card())!=null){
             return Result.error("此人信息已存在，请勿重复插入");
         }
 //        // 把文件的内容储存到本地磁盘上
@@ -57,8 +58,8 @@ public class OldPersonController {
     }
 
 
-    // 修改老人信息
-    @DeleteMapping("/oldperson/{id}")
+    // 删除老人信息
+    @DeleteMapping("/delete/{id}")
     public Result deleteOldPerson(@PathVariable int id){
         OldPerson oldPerson=oldPersonService.getOldPersonById(id);
         if(oldPerson==null){
@@ -70,7 +71,7 @@ public class OldPersonController {
     }
 
     // 更新老人信息
-    @PostMapping("/oldperson")
+    @PostMapping("/update")
     public Result updateOldPerson(@RequestBody OldPerson oldPerson){
         if(oldPersonService.getOldPersonById(oldPerson.getId())==null){
             return Result.error("该id的老人信息不存在");

@@ -14,10 +14,10 @@ public class Employee {
     private String name;
     private String gender;
     private String phone;
-    private String idCard;
+    private String id_card;
     private LocalDateTime birthday;
-    private LocalDateTime hireDate; // 入职日期
-    private LocalDateTime resignDate;  // 离职日期
-    private String imgsetDir; // 头像url地址
+    private LocalDateTime hire_date; // 入职日期
+    private LocalDateTime resign_date;  // 离职日期
+    private String imgset_dir; // 头像url地址
     private String description; // 描述
 }

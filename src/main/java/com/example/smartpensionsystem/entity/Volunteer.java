@@ -14,10 +14,10 @@ public class Volunteer {
     private String name; // 姓名
     private String gender; // 性别
     private String phone;  // 手机号
-    private String idCard; // 身份证
+    private String id_card; // 身份证
     private LocalDateTime birthday; // 生日
-    private LocalDateTime checkinDate; // 访问日期
-    private LocalDateTime checkoutDate; // 离开日期
-    private String imgsetDir; // 头像url地址
+    private LocalDateTime checkin_date; // 访问日期
+    private LocalDateTime checkout_date; // 离开日期
+    private String imgset_dir; // 头像url地址
     private String description; // 描述
 }

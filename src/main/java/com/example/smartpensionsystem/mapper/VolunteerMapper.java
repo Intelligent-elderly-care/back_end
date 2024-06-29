@@ -9,23 +9,23 @@ import java.util.List;
 @Mapper
 public interface VolunteerMapper {
 
-    @Select("SELECT * FROM volunteer WHERE id = #{id}")
+    @Select("SELECT * FROM volunteer_info WHERE id = #{id}")
     Volunteer getVolunteerById(Integer id);
 
-    @Select("SELECT * FROM volunteer")
+    @Select("SELECT * FROM volunteer_info")
     List<Volunteer> getAllVolunteers();
 
-    @Insert("INSERT INTO volunteer (name, gender, phone, idCard, birthday, checkinDate, checkoutDate, imgsetDir, description) " +
-            "VALUES (#{name}, #{gender}, #{phone}, #{idCard}, #{birthday}, #{checkinDate}, #{checkoutDate}, #{imgsetDir}, #{description})")
+    @Insert("INSERT INTO volunteer_info (name, gender, phone, id_card, birthday, checkin_date, checkout_date, imgset_dir, description) " +
+            "VALUES (#{name}, #{gender}, #{phone}, #{id_card}, #{birthday}, #{checkin_date}, #{checkout_date}, #{imgset_dir}, #{description})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insertVolunteer(Volunteer volunteer);
 
-    @Update("UPDATE volunteer " +
-            "SET name=#{name}, gender=#{gender}, phone=#{phone}, idCard=#{idCard}, birthday=#{birthday}, " +
-            "checkinDate=#{checkinDate}, checkoutDate=#{checkoutDate}, imgsetDir=#{imgsetDir}, description=#{description} " +
+    @Update("UPDATE volunteer_info " +
+            "SET name=#{name}, gender=#{gender}, phone=#{phone}, id_card=#{id_card}, birthday=#{birthday}, " +
+            "checkin_date=#{checkin_date}, checkout_date=#{checkout_date}, imgset_dir=#{imgset_dir}, description=#{description} " +
             "WHERE id=#{id}")
     void updateVolunteer(Volunteer volunteer);
 
-    @Delete("DELETE FROM volunteer WHERE id = #{id}")
+    @Delete("DELETE FROM volunteer_info WHERE id = #{id}")
     void deleteVolunteer(Integer id);
 }
