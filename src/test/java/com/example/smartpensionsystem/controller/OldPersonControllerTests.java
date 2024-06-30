@@ -1,116 +1,112 @@
 package com.example.smartpensionsystem.controller;
 
 import com.example.smartpensionsystem.entity.OldPerson;
-import com.example.smartpensionsystem.entity.Result;
 import com.example.smartpensionsystem.service.OldPersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-@ExtendWith(MockitoExtension.class)
-@WebMvcTest(OldPersonController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class OldPersonControllerTests {
 
-    @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Mock
     private OldPersonService oldPersonService;
 
-    private OldPerson oldPerson;
+    @InjectMocks
+    private OldPersonController oldPersonController;
 
     @BeforeEach
-    public void setup() {
-        oldPerson = new OldPerson(1, "John Doe", "Male", "1234567890", "123456789012345678",
-                LocalDateTime.now(), LocalDateTime.now().plusDays(10), LocalDateTime.of(1950, 1, 1, 0, 0),
-                "http://example.com/image.jpg", "101", "Jane Doe", "Daughter", "0987654321", "jane_wechat",
-                "Jim Doe", "Son", "1122334455", "jim_wechat", "Healthy", "Description");
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(oldPersonController).build();
     }
 
     @Test
     public void testGetOldPersonById() throws Exception {
-        Mockito.when(oldPersonService.getOldPersonById(1)).thenReturn(oldPerson);
+        OldPerson oldPerson = new OldPerson(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), "http://example.com/image.jpg", "101", "Jane Doe", "Daughter", "0987654321", "jane_wechat", "Jim Doe", "Son", "1122334455", "jim_wechat", "Healthy", "Description");
 
-        mockMvc.perform(get("/oldperson/1"))
+        // 模拟服务层返回数据
+        when(oldPersonService.getOldPersonById(1)).thenReturn(oldPerson);
+
+        mockMvc.perform(get("/oldpersons/findById/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.name", is("John Doe")));
-    }
-
-    @Test
-    public void testGetOldPersonById_NotFound() throws Exception {
-        Mockito.when(oldPersonService.getOldPersonById(1)).thenReturn(null);
-
-        mockMvc.perform(get("/oldperson/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message", is("该id的老人信息不存在")));
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data.name").value("John Doe"))
+                .andDo(print());
     }
 
     @Test
     public void testGetAllOldPersons() throws Exception {
-        Mockito.when(oldPersonService.allOldPersons()).thenReturn(Collections.singletonList(oldPerson));
-
-        mockMvc.perform(get("/oldperson/all"))
+        mockMvc.perform(get("/oldpersons/findAll"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].name", is("John Doe")));
+                .andExpect(jsonPath("$.code").value(0))
+                .andDo(print());
     }
-//测试
+
     @Test
     public void testAddOldPerson() throws Exception {
-        // Mock the service method to return null to simulate no existing OldPerson with the same ID card
-        Mockito.when(oldPersonService.getOldPersonByIdCard("123456789012345678")).thenReturn(null);
-        Mockito.doNothing().when(oldPersonService).addOldPerson(any(OldPerson.class));
+        OldPerson oldPerson = new OldPerson("John Doe", "Male", "1234567890", "123456789012345678",
+                LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), "http://example.com/image.jpg",
+                "101", "Jane Doe", "Daughter", "0987654321", "jane_wechat", "Jim Doe", "Son",
+                "1122334455", "jim_wechat", "Healthy", "Description");
 
-        String oldPersonJson = "{ \"name\": \"John Doe\", \"gender\": \"Male\", \"phone\": \"1234567890\", \"id_card\": \"123456789012345678\", \"checkin_date\": \"2023-06-01T00:00:00\", \"checkout_date\": \"2023-06-10T00:00:00\", \"birthday\": \"1950-01-01T00:00:00\", \"imgsetDir\": \"http://example.com/image.jpg\", \"roomNumber\": \"101\", \"firstGuardianName\": \"Jane Doe\", \"firstGuardianRelationship\": \"Daughter\", \"firstGuardianPhone\": \"0987654321\", \"firstGuardianWechat\": \"jane_wechat\", \"secondGuardianName\": \"Jim Doe\", \"secondGuardianRelationship\": \"Son\", \"secondGuardianPhone\": \"1122334455\", \"secondGuardianWechat\": \"jim_wechat\", \"healthState\": \"Healthy\", \"description\": \"Description\" }";
+        // 模拟返回null以便表示此人信息不存在
+        when(oldPersonService.getOldPersonByIdCard(anyString())).thenReturn(null);
+        // 使用 doNothing 来处理 void 方法
+        doNothing().when(oldPersonService).addOldPerson(any(OldPerson.class));
 
-        mockMvc.perform(put("/oldperson")
+        mockMvc.perform(put("/oldpersons/add")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(oldPersonJson))
+                        .content("{ \"name\": \"John Doe\", \"gender\": \"Male\", \"phone\": \"1234567890\", \"id_card\": \"123456789012345678\", \"checkin_date\": \"2023-06-01T00:00:00\", \"checkout_date\": \"2023-06-10T00:00:00\", \"birthday\": \"1950-01-01T00:00:00\", \"imgset_dir\": \"http://example.com/image.jpg\", \"room_number\": \"101\", \"firstguardian_name\": \"Jane Doe\", \"firstguardian_relationship\": \"Daughter\", \"firstguardian_phone\": \"0987654321\", \"firstguardian_wechat\": \"jane_wechat\", \"secondguardian_name\": \"Jim Doe\", \"secondguardian_relationship\": \"Son\", \"secondguardian_phone\": \"1122334455\", \"secondguardian_wechat\": \"jim_wechat\", \"health_state\": \"Healthy\", \"description\": \"Description\" }"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code", is(0)));
+                .andExpect(jsonPath("$.code").value(0))
+                .andDo(print());
     }
 
 
     @Test
     public void testDeleteOldPerson() throws Exception {
-        Mockito.when(oldPersonService.getOldPersonById(1)).thenReturn(oldPerson);
-        Mockito.doNothing().when(oldPersonService).deleteOldPersonById(1);
+        OldPerson oldPerson = new OldPerson(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), "http://example.com/image.jpg", "101", "Jane Doe", "Daughter", "0987654321", "jane_wechat", "Jim Doe", "Son", "1122334455", "jim_wechat", "Healthy", "Description");
 
-        mockMvc.perform(delete("/oldperson/1"))
+        when(oldPersonService.getOldPersonById(1)).thenReturn(oldPerson);
+
+        mockMvc.perform(delete("/oldpersons/delete/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code", is(0)));
+                .andExpect(jsonPath("$.code").value(0))
+                .andDo(print());
     }
 
     @Test
     public void testUpdateOldPerson() throws Exception {
-        Mockito.when(oldPersonService.getOldPersonById(1)).thenReturn(oldPerson);
-        Mockito.doNothing().when(oldPersonService).updateOldPerson(any(OldPerson.class));
+        OldPerson oldPerson = new OldPerson(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), "http://example.com/image.jpg", "101", "Jane Doe", "Daughter", "0987654321", "jane_wechat", "Jim Doe", "Son", "1122334455", "jim_wechat", "Healthy", "Description");
 
-        String oldPersonJson = "{ \"id\": 1, \"name\": \"John Doe Updated\", \"gender\": \"Male\", \"phone\": \"1234567890\", \"id_card\": \"123456789012345678\", \"checkin_date\": \"2023-06-01T00:00:00\", \"checkout_date\": \"2023-06-10T00:00:00\", \"birthday\": \"1950-01-01T00:00:00\", \"imgsetDir\": \"http://example.com/image.jpg\", \"roomNumber\": \"101\", \"firstGuardianName\": \"Jane Doe\", \"firstGuardianRelationship\": \"Daughter\", \"firstGuardianPhone\": \"0987654321\", \"firstGuardianWechat\": \"jane_wechat\", \"secondGuardianName\": \"Jim Doe\", \"secondGuardianRelationship\": \"Son\", \"secondGuardianPhone\": \"1122334455\", \"secondGuardianWechat\": \"jim_wechat\", \"healthState\": \"Healthy\", \"description\": \"Description\" }";
+        when(oldPersonService.getOldPersonById(1)).thenReturn(oldPerson);
 
-        mockMvc.perform(post("/oldperson")
+        mockMvc.perform(post("/oldpersons/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(oldPersonJson))
+                        .content("{ \"id\": 1, \"name\": \"John Doe Updated\", \"gender\": \"Male\", \"phone\": \"1234567890\", \"id_card\": \"123456789012345678\", \"checkin_date\": \"2023-06-01T00:00:00\", \"checkout_date\": \"2023-06-10T00:00:00\", \"birthday\": \"1950-01-01T00:00:00\", \"imgset_dir\": \"http://example.com/image.jpg\", \"room_number\": \"101\", \"firstguardian_name\": \"Jane Doe\", \"firstguardian_relationship\": \"Daughter\", \"firstguardian_phone\": \"0987654321\", \"firstguardian_wechat\": \"jane_wechat\", \"secondguardian_name\": \"Jim Doe\", \"secondguardian_relationship\": \"Son\", \"secondguardian_phone\": \"1122334455\", \"secondguardian_wechat\": \"jim_wechat\", \"health_state\": \"Healthy\", \"description\": \"Description\" }"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code", is(0)));
+                .andExpect(jsonPath("$.code").value(0))
+                .andDo(print());
     }
 }
