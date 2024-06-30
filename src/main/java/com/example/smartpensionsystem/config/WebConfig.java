@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // 配置跨域，允许任何域名的请求
+        // 配置跨域，允许任何域名的请求1
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
