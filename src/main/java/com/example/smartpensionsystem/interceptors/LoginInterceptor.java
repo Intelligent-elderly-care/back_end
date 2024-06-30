@@ -1,4 +1,4 @@
-/***package com.example.smartpensionsystem.interceptors;
+package com.example.smartpensionsystem.interceptors;
 
 import com.example.smartpensionsystem.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,4 +39,4 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
     }
-}***/
+}

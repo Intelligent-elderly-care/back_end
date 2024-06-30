@@ -1,4 +1,4 @@
-/***package com.example.smartpensionsystem.config;
+package com.example.smartpensionsystem.config;
 
 import com.example.smartpensionsystem.interceptors.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,4 +27,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }
-}***/
+}
