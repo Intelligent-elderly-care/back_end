@@ -18,4 +18,6 @@ public interface OldPersonService {
     void deleteOldPersonById(int id);
     // 更新老人信息
     void updateOldPerson(OldPerson oldPerson);
+    //根据老人名字查询
+    OldPerson getOldPersonsByName(String name);
 }

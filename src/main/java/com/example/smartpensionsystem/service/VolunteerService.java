@@ -15,4 +15,6 @@ public interface VolunteerService {
     void updateVolunteer(Volunteer volunteer);
     //删除义工
     void deleteVolunteer(Integer id);
+    //根据名字查询义工
+    List<Volunteer> getVolunteersByName(String name);
 }

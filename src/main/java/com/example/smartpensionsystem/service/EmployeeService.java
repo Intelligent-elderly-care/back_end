@@ -15,4 +15,6 @@ public interface EmployeeService {
     void updateEmployee(Employee employee);
     //删除工作人员
     void deleteEmployee(Integer id);
+    //根据name查询工作人员
+    List<Employee> getEmployeesByName(String name);
 }

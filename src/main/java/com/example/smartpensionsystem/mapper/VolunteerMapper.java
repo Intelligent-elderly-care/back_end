@@ -28,4 +28,7 @@ public interface VolunteerMapper {
 
     @Delete("DELETE FROM volunteer_info WHERE id = #{id}")
     void deleteVolunteer(Integer id);
+
+    @Select("SELECT * FROM volunteer_info WHERE name = #{name}")
+    List<Volunteer> getVolunteersByName(String name);
 }

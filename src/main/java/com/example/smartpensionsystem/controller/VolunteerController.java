@@ -65,4 +65,15 @@ public class VolunteerController {
             return Result.success();
         }
     }
+
+    // 根据姓名获取志愿者信息
+    @GetMapping("/findByName/{name}")
+    public Result getVolunteersByName(@PathVariable String name) {
+        List<Volunteer> volunteers = volunteerService.getVolunteersByName(name);
+        if (volunteers != null && !volunteers.isEmpty()) {
+            return Result.success(volunteers);
+        } else {
+            return Result.error("该姓名的志愿者信息不存在");
+        }
+    }
 }

@@ -39,4 +39,9 @@ public class VolunteerServiceImpl implements VolunteerService {
     public void deleteVolunteer(Integer id) {
         volunteerMapper.deleteVolunteer(id);
     }
+
+    @Override
+    public List<Volunteer> getVolunteersByName(String name) {
+        return volunteerMapper.getVolunteersByName(name);
+    }
 }

@@ -69,4 +69,15 @@ public class EmployeeController {
             return Result.success();
         }
     }
+    // 根据名字获取员工信息
+    @GetMapping("/findByName/{name}")
+    public Result getEmployeesByName(@PathVariable String name) {
+        List<Employee> employees = employeeService.getEmployeesByName(name);
+        if (employees != null && !employees.isEmpty()) {
+            return Result.success(employees);
+        } else {
+            return Result.error("该名字的员工信息不存在");
+        }
+    }
+
 }

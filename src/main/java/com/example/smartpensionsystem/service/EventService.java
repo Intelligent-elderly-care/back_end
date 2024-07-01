@@ -19,4 +19,7 @@ public interface EventService {
 
     // 删除事件
     void deleteEvent(Integer id);
+
+    //根据事件类型查询
+    List<Event> getEventsByType(String event_type);
 }

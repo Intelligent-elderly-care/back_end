@@ -42,4 +42,10 @@ public class OldPersonServiceImpl implements OldPersonService {
     public void updateOldPerson(OldPerson oldPerson) {
         oldPersonMapper.updateOldPerson(oldPerson);
     }
+
+
+    @Override
+    public OldPerson getOldPersonsByName(String name) {
+        return oldPersonMapper.getOldPersonsByName(name);
+    }
 }

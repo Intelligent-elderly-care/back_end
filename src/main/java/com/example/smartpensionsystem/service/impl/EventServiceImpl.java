@@ -38,4 +38,9 @@ public class EventServiceImpl implements EventService {
     public void deleteEvent(Integer id) {
         eventMapper.deleteEvent(id);
     }
+
+    @Override
+    public List<Event> getEventsByType(String event_type) {
+        return eventMapper.getEventsByType(event_type);
+    }
 }

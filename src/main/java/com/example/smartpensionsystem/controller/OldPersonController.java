@@ -58,6 +58,16 @@ public class OldPersonController {
         return Result.success();
     }
 
+    // 根据姓名获取老人信息
+    @GetMapping("/findByName/{name}")
+    public Result getOldPersonsByName(@PathVariable String name) {
+        OldPerson oldPerson=oldPersonService.getOldPersonsByName(name);
+        if(oldPerson==null){
+            return Result.error("该id的老人信息不存在");
+        }else{
+            return Result.success(oldPerson);
+        }
+    }
 
     // 删除老人信息
     @DeleteMapping("/delete/{id}")

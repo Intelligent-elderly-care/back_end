@@ -65,4 +65,14 @@ public class EventController {
             return Result.success();
         }
     }
+
+    @GetMapping("/findByType/{type}")
+    public Result getEventsByType(@PathVariable String type) {
+        List<Event> events = eventService.getEventsByType(type);
+        if (events != null && !events.isEmpty()) {
+            return Result.success(events);
+        } else {
+            return Result.error("该类型的事件信息不存在");
+        }
+    }
 }
