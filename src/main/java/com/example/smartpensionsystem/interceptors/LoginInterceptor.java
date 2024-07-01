@@ -38,7 +38,6 @@ public class LoginInterceptor implements HandlerInterceptor {
                 // token已经失效了
                 throw new RuntimeException();
             }
-
             // 验证通过，放行
             return true;
         } catch (Exception e) {
