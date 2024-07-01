@@ -45,7 +45,7 @@ public class OldPersonServiceImpl implements OldPersonService {
 
 
     @Override
-    public List<OldPerson> getOldPersonsByName(String name) {
+    public OldPerson getOldPersonsByName(String name) {
         return oldPersonMapper.getOldPersonsByName(name);
     }
 }

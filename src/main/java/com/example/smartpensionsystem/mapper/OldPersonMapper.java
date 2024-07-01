@@ -49,5 +49,5 @@ public interface OldPersonMapper {
     void updateOldPerson(OldPerson oldPerson);
 
     @Select("SELECT * FROM oldperson_info WHERE name = #{name}")
-    List<OldPerson> getOldPersonsByName(String name);
+    OldPerson getOldPersonsByName(String name);
 }
