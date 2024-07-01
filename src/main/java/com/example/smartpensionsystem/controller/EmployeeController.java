@@ -70,8 +70,8 @@ public class EmployeeController {
         }
     }
     // 根据名字获取员工信息
-    @GetMapping("/findByName/{name}")
-    public Result getEmployeesByName(@PathVariable String name) {
+    @GetMapping("/findByName")
+    public Result getEmployeesByName(@RequestParam("name") String name) {
         List<Employee> employees = employeeService.getEmployeesByName(name);
         if (employees != null && !employees.isEmpty()) {
             return Result.success(employees);
