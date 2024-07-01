@@ -40,7 +40,7 @@ public class EmployeeController {
             return Result.error("姓名不能为空");
         } else if (employee.getId_card() == null) {
             return Result.error("身份证不能为空");
-        } else if (employeeService.getEmployeeById(employee.getId()) != null) {
+        } else if (employeeService.getEmployeeByIdCard(employee.getId_card()) != null) {
             return Result.error("此人信息已存在，请勿重复插入");
         }
         employeeService.insertEmployee(employee);

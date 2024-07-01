@@ -7,6 +7,8 @@ import java.util.List;
 public interface VolunteerService {
     //根据id查看义工信息
     Volunteer getVolunteerById(Integer id);
+    //根据身份证号查看义工
+    Volunteer getVolunteerByIdCard(String id_card);
     //查看所有义工信息
     List<Volunteer> getAllVolunteers();
     //添加义工

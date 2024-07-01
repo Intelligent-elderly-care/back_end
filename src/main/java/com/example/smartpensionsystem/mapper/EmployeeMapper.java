@@ -1,6 +1,7 @@
 package com.example.smartpensionsystem.mapper;
 
 import com.example.smartpensionsystem.entity.Employee;
+import com.example.smartpensionsystem.entity.OldPerson;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,9 @@ public interface EmployeeMapper {
 
     @Select("SELECT * FROM employee_info WHERE id = #{id}")
     Employee getEmployeeById(Integer id);
+
+    @Select("select * from  employee_info where id_card=#{id_card}")
+    Employee getEmployeeByIdCard(String id_card);
 
     @Select("SELECT * FROM employee_info")
     List<Employee> getAllEmployees();

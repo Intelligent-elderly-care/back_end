@@ -38,6 +38,10 @@ public class VolunteerController {
     public Result insertVolunteer(@RequestBody Volunteer volunteer) {
         if (volunteer.getName() == null) {
             return Result.error("姓名不能为空");
+        }else if(volunteer.getId_card()==null){
+            return  Result.error("身份证不能为空");
+        }else if(volunteerService.getVolunteerByIdCard(volunteer.getId_card())!=null){
+            return Result.error("此人信息已存在，请勿重复插入");
         }
         volunteerService.insertVolunteer(volunteer);
         return Result.success();
