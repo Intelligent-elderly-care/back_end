@@ -19,14 +19,16 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 令牌验证
         String token=request.getHeader("Authorization");
-        if(request.getMethod().equals("OPTIONS")){ // 直接响应数据 （***** 这里是最重要的if ***）
+        if(request.getMethod().equals("OPTIONS")){
             return true;
         }
+
         //验证token
         try{
             // 从redis中获取相同的token
             ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
             String redisToken=operations.get(token);
+
             if(redisToken==null){
                 // token已经失效了
                 throw new RuntimeException();
