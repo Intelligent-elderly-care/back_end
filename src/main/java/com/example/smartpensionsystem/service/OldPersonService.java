@@ -19,5 +19,5 @@ public interface OldPersonService {
     // 更新老人信息
     void updateOldPerson(OldPerson oldPerson);
     //根据老人名字查询
-    OldPerson getOldPersonsByName(String name);
+    List<OldPerson> getOldPersonsByName(String name);
 }

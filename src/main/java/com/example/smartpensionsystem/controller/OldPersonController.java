@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -61,11 +62,11 @@ public class OldPersonController {
     // 根据姓名获取老人信息
     @GetMapping("/findByName")
     public Result getOldPersonsByName(@RequestParam("name") String name) {
-        OldPerson oldPerson = oldPersonService.getOldPersonsByName(name);
-        if (oldPerson == null) {
+        List<OldPerson> oldPersons = oldPersonService.getOldPersonsByName(name);
+        if (oldPersons.isEmpty()) {
             return Result.error("该姓名的老人信息不存在");
         } else {
-            return Result.success(oldPerson);
+            return Result.success(oldPersons);
         }
     }
 
