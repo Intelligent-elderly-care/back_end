@@ -39,6 +39,9 @@ public class EventController {
         if (event.getEvent_desc() == null) {
             return Result.error("描述不能为空");
         }
+        else if(event.getEvent_type()==5){
+            eventService.sendDangerousItemEmail(event);
+        }
         eventService.insertEvent(event);
         return Result.success();
     }
