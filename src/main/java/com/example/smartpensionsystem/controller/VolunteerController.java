@@ -50,6 +50,7 @@ public class VolunteerController {
     // 更新志愿者信息
     @PostMapping("/update")
     public Result updateVolunteer(@RequestBody Volunteer volunteer) {
+        System.out.println(volunteer);
         if (volunteerService.getVolunteerById(volunteer.getId()) == null) {
             return Result.error("该id的志愿者信息不存在");
         } else {
