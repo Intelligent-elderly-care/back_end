@@ -1,6 +1,7 @@
 package com.example.smartpensionsystem.controller;
 
 import com.example.smartpensionsystem.entity.Event;
+import com.example.smartpensionsystem.entity.Result;
 import com.example.smartpensionsystem.service.EventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,10 +73,8 @@ public class EventControllerTests {
     public void testInsertEvent() throws Exception {
         Event event = new Event(1, 0, LocalDateTime.now(), "Location", "Description", 1);
 
-        // 模拟返回null以便表示此事件信息不存在
-        when(eventService.getEventById(1)).thenReturn(null);
-        // 使用 doNothing 来处理 void 方法
         doNothing().when(eventService).insertEvent(any(Event.class));
+        when(eventService.getEventById(1)).thenReturn(null);
 
         mockMvc.perform(put("/events/add")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -100,6 +99,7 @@ public class EventControllerTests {
         Event event = new Event(1, 0, LocalDateTime.now(), "Location", "Description", 1);
 
         when(eventService.getEventById(1)).thenReturn(event);
+        doNothing().when(eventService).deleteEvent(1);
 
         mockMvc.perform(delete("/events/delete/1"))
                 .andExpect(status().isOk())
@@ -113,6 +113,7 @@ public class EventControllerTests {
         Event event = new Event(1, 0, LocalDateTime.now(), "Location", "Description", 1);
 
         when(eventService.getEventById(1)).thenReturn(event);
+        doNothing().when(eventService).updateEvent(any(Event.class));
 
         mockMvc.perform(post("/events/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -120,6 +121,22 @@ public class EventControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(0))
                 .andExpect(jsonPath("$.message").value("操作成功"))
+                .andDo(print());
+    }
+
+    @Test
+    public void testGetEventsByType() throws Exception {
+        Event event1 = new Event(1, 0, LocalDateTime.now(), "Location1", "Description1", 1);
+        Event event2 = new Event(2, 0, LocalDateTime.now(), "Location2", "Description2", 2);
+        List<Event> events = Arrays.asList(event1, event2);
+
+        when(eventService.getEventsByType("0")).thenReturn(events);
+
+        mockMvc.perform(get("/events/findByType/0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data[0].event_desc").value("Description1"))
+                .andExpect(jsonPath("$.data[1].event_desc").value("Description2"))
                 .andDo(print());
     }
 }

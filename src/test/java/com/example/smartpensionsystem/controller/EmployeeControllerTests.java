@@ -40,7 +40,7 @@ public class EmployeeControllerTests {
 
     @Test
     public void testGetEmployeeById() throws Exception {
-        Employee employee = new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description");
+        Employee employee = new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description", 1, 2);
 
         when(employeeService.getEmployeeById(1)).thenReturn(employee);
 
@@ -56,8 +56,8 @@ public class EmployeeControllerTests {
     @Test
     public void testGetAllEmployees() throws Exception {
         List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description"));
-        employees.add(new Employee(2, "Jane Doe", "Female", "0987654321", "876543210987654321", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description"));
+        employees.add(new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description", 1, 2));
+        employees.add(new Employee(2, "Jane Doe", "Female", "0987654321", "876543210987654321", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description", 3, 4));
 
         when(employeeService.getAllEmployees()).thenReturn(employees);
 
@@ -73,24 +73,25 @@ public class EmployeeControllerTests {
 
     @Test
     public void testInsertEmployee() throws Exception {
-        Employee employee = new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description");
+        Employee employee = new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description", 1, 2);
 
         when(employeeService.getEmployeeById(1)).thenReturn(null);
+        when(employeeService.getEmployeeByIdCard("123456789012345678")).thenReturn(null);
 
         mockMvc.perform(put("/employees/add")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":1,\"name\":\"John Doe\",\"gender\":\"Male\",\"phone\":\"1234567890\",\"id_card\":\"123456789012345678\",\"birthday\":\"2022-01-01T00:00:00\",\"hire_date\":\"2022-01-01T00:00:00\",\"imgset_dir\":\"img_url\",\"description\":\"description\"}"))
+                        .content("{\"id\":1,\"name\":\"John Doe\",\"gender\":\"Male\",\"phone\":\"1234567890\",\"id_card\":\"123456789012345678\",\"birthday\":\"2022-01-01T00:00:00\",\"hire_date\":\"2022-01-01T00:00:00\",\"resign_date\":null,\"imgset_dir\":\"img_url\",\"description\":\"description\",\"oldperson_id\":1,\"volunteer_id\":2}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", is("操作成功")));
 
-        verify(employeeService, times(1)).getEmployeeById(1);
+        verify(employeeService, times(1)).getEmployeeByIdCard("123456789012345678");
         verify(employeeService, times(1)).insertEmployee(any(Employee.class));
         verifyNoMoreInteractions(employeeService);
     }
 
     @Test
     public void testDeleteEmployee() throws Exception {
-        Employee employee = new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description");
+        Employee employee = new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description", 1, 2);
 
         when(employeeService.getEmployeeById(1)).thenReturn(employee);
 
@@ -105,18 +106,36 @@ public class EmployeeControllerTests {
 
     @Test
     public void testUpdateEmployee() throws Exception {
-        Employee employee = new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description");
+        Employee employee = new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description", 1, 2);
 
         when(employeeService.getEmployeeById(1)).thenReturn(employee);
 
         mockMvc.perform(post("/employees/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":1,\"name\":\"John Doe\",\"gender\":\"Male\",\"phone\":\"1234567890\",\"id_card\":\"123456789012345678\",\"birthday\":\"2022-01-01T00:00:00\",\"hire_date\":\"2022-01-01T00:00:00\",\"imgset_dir\":\"img_url\",\"description\":\"description\"}"))
+                        .content("{\"id\":1,\"name\":\"John Doe\",\"gender\":\"Male\",\"phone\":\"1234567890\",\"id_card\":\"123456789012345678\",\"birthday\":\"2022-01-01T00:00:00\",\"hire_date\":\"2022-01-01T00:00:00\",\"resign_date\":null,\"imgset_dir\":\"img_url\",\"description\":\"description\",\"oldperson_id\":1,\"volunteer_id\":2}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", is("操作成功")));
 
         verify(employeeService, times(1)).getEmployeeById(1);
         verify(employeeService, times(1)).updateEmployee(any(Employee.class));
+        verifyNoMoreInteractions(employeeService);
+    }
+
+    @Test
+    public void testGetEmployeesByName() throws Exception {
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee(1, "John Doe", "Male", "1234567890", "123456789012345678", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description", 1, 2));
+        employees.add(new Employee(2, "John Smith", "Male", "0987654321", "876543210987654321", LocalDateTime.now(), LocalDateTime.now(), null, "img_url", "description", 3, 4));
+
+        when(employeeService.getEmployeesByName("John")).thenReturn(employees);
+
+        mockMvc.perform(get("/employees/findByName").param("name", "John"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(2)))
+                .andExpect(jsonPath("$.data[0].name", is("John Doe")))
+                .andExpect(jsonPath("$.data[1].name", is("John Smith")));
+
+        verify(employeeService, times(1)).getEmployeesByName("John");
         verifyNoMoreInteractions(employeeService);
     }
 }
