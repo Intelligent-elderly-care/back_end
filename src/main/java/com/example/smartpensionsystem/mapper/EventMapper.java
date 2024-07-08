@@ -27,4 +27,7 @@ public interface EventMapper {
 
     @Delete("DELETE FROM event_info WHERE id = #{id}")
     void deleteEvent(Integer id);
+
+    @Select("SELECT * FROM event_info WHERE event_type = #{event_type}")
+    List<Event> getEventsByType(String event_type);
 }

@@ -39,6 +39,9 @@ public class EventController {
         if (event.getEvent_desc() == null) {
             return Result.error("描述不能为空");
         }
+        else if(event.getEvent_type()==5){
+            eventService.sendDangerousItemEmail(event);
+        }
         eventService.insertEvent(event);
         return Result.success();
     }
@@ -63,6 +66,16 @@ public class EventController {
         } else {
             eventService.updateEvent(event);
             return Result.success();
+        }
+    }
+
+    @GetMapping("/findByType/{type}")
+    public Result getEventsByType(@PathVariable String type) {
+        List<Event> events = eventService.getEventsByType(type);
+        if (events != null && !events.isEmpty()) {
+            return Result.success(events);
+        } else {
+            return Result.error("该类型的事件信息不存在");
         }
     }
 }

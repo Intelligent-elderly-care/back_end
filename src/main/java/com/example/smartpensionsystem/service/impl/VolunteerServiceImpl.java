@@ -21,6 +21,11 @@ public class VolunteerServiceImpl implements VolunteerService {
     }
 
     @Override
+    public Volunteer getVolunteerByIdCard(String id_card) {
+        return volunteerMapper.getVolunteerByIdCard(id_card);
+    }
+
+    @Override
     public List<Volunteer> getAllVolunteers() {
         return volunteerMapper.getAllVolunteers();
     }
@@ -38,5 +43,10 @@ public class VolunteerServiceImpl implements VolunteerService {
     @Override
     public void deleteVolunteer(Integer id) {
         volunteerMapper.deleteVolunteer(id);
+    }
+
+    @Override
+    public List<Volunteer> getVolunteersByName(String name) {
+        return volunteerMapper.getVolunteersByName(name);
     }
 }

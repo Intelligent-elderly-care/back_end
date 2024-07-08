@@ -1,4 +1,5 @@
 package com.example.smartpensionsystem.interceptors;
+
 import com.example.smartpensionsystem.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,33 +19,32 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 令牌验证
+
         String token=request.getHeader("Authorization");
+        if(request.getMethod().equals("OPTIONS")){
+            return true;
+        }
+
         //验证token
         try{
+
             // 从redis中获取相同的token
             ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+
             String redisToken=operations.get(token);
+
             if(redisToken==null){
+
                 // token已经失效了
                 throw new RuntimeException();
             }
-
-            // Map<String,Object>claims= JwtUtil.parseToken(token);
-            // 把业务数据存储到ThreadLocal中
-//            ThreadLocalUtil.set(claims);
-            // 放行
+            // 验证通过，放行
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             // http响应状态码为401
-            response.setStatus(401);
-            //不放行
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            // 不放行
             return false;
         }
     }
-
-//    @Override
-//    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-//        // 用完后清空，防止内存泄漏
-//        ThreadLocalUtil.remove();
-//    }
 }

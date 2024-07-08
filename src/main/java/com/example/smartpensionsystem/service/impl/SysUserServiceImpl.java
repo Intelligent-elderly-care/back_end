@@ -7,6 +7,8 @@ import com.example.smartpensionsystem.utils.Md5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SysUserServiceImpl implements SysUserService {
     @Autowired
@@ -33,4 +35,8 @@ public class SysUserServiceImpl implements SysUserService {
     public void updateInfo(SysUser sysUser) {
         sysUserMapper.updateInfo(sysUser);
     }
+
+    @Override
+    public List<SysUser> getAllAdmins(){return sysUserMapper.getAllAdmins();}
+
 }

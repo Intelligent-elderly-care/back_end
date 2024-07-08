@@ -2,6 +2,8 @@ package com.example.smartpensionsystem.service;
 
 import com.example.smartpensionsystem.entity.SysUser;
 
+import java.util.List;
+
 public interface SysUserService {
     // 注册
     void register(String username, String password);
@@ -14,4 +16,6 @@ public interface SysUserService {
 
     // 更新管理员信息
     void updateInfo(SysUser sysUser);
+
+    List<SysUser> getAllAdmins();
 }

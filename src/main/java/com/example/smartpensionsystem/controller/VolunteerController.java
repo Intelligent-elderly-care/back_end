@@ -38,6 +38,10 @@ public class VolunteerController {
     public Result insertVolunteer(@RequestBody Volunteer volunteer) {
         if (volunteer.getName() == null) {
             return Result.error("姓名不能为空");
+        }else if(volunteer.getId_card()==null){
+            return  Result.error("身份证不能为空");
+        }else if(volunteerService.getVolunteerByIdCard(volunteer.getId_card())!=null){
+            return Result.error("此人信息已存在，请勿重复插入");
         }
         volunteerService.insertVolunteer(volunteer);
         return Result.success();
@@ -46,6 +50,7 @@ public class VolunteerController {
     // 更新志愿者信息
     @PostMapping("/update")
     public Result updateVolunteer(@RequestBody Volunteer volunteer) {
+        System.out.println(volunteer);
         if (volunteerService.getVolunteerById(volunteer.getId()) == null) {
             return Result.error("该id的志愿者信息不存在");
         } else {
@@ -65,4 +70,16 @@ public class VolunteerController {
             return Result.success();
         }
     }
+
+    // 根据姓名获取志愿者信息
+    @GetMapping("/findByName")
+    public Result getVolunteersByName(@RequestParam("name") String name) {
+        List<Volunteer> volunteers = volunteerService.getVolunteersByName(name);
+        if (volunteers != null && !volunteers.isEmpty()) {
+            return Result.success(volunteers);
+        } else {
+            return Result.error("该姓名的志愿者信息不存在");
+        }
+    }
+
 }

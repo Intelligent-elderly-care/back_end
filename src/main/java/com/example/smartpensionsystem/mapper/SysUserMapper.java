@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 @Mapper
 public interface SysUserMapper {
 
@@ -23,4 +25,7 @@ public interface SysUserMapper {
 
     @Update("update sys_user set real_name=#{real_name},sex=#{sex},email=#{email},phone=#{phone},description=#{description} where username=#{username}")
     void updateInfo(SysUser sysUser);
+
+    @Select("select * from sys_user")
+    List<SysUser> getAllAdmins();
 }

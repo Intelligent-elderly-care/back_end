@@ -1,6 +1,7 @@
 package com.example.smartpensionsystem.service.impl;
 
 import com.example.smartpensionsystem.entity.Employee;
+import com.example.smartpensionsystem.entity.OldPerson;
 import com.example.smartpensionsystem.mapper.EmployeeMapper;
 import com.example.smartpensionsystem.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee getEmployeeById(Integer id) {
         return employeeMapper.getEmployeeById(id);
+    }
+
+    @Override
+    public Employee getEmployeeByIdCard(String id_card) {
+        return employeeMapper.getEmployeeByIdCard(id_card);
     }
 
     @Override
@@ -37,5 +43,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteEmployee(Integer id) {
         employeeMapper.deleteEmployee(id);
+    }
+    @Override
+    public List<Employee> getEmployeesByName(String name) {
+        return employeeMapper.getEmployeesByName(name);
     }
 }

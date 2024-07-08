@@ -20,4 +20,6 @@ public class Employee {
     private LocalDateTime resign_date;  // 离职日期
     private String imgset_dir; // 头像url地址
     private String description; // 描述
+    private int oldperson_id; // 义工负责老人的id
+    private int volunteer_id; // 义工负责志愿者的id
 }

@@ -20,4 +20,5 @@ public class Volunteer {
     private LocalDateTime checkout_date; // 离开日期
     private String imgset_dir; // 头像url地址
     private String description; // 描述
+    private int oldperson_id;  // 义工所负责的老人id
 }
